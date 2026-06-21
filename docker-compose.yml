@@ -1,5 +1,10 @@
 version: "3.9"
 
+# This compose file runs the database + API locally with one command.
+# Run the React frontend separately with: cd client && npm install && npm run dev
+# (Vite's dev server needs to run on your host machine for hot-reload to work well;
+#  for production, the frontend is deployed to Vercel instead — see the deploy guide.)
+
 services:
   db:
     image: postgres:15-alpine
@@ -25,21 +30,9 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       PORT: 5000
-      CLIENT_URL: http://localhost:3000
+      CLIENT_URL: http://localhost:5173
     ports:
       - "5000:5000"
-
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    restart: always
-    depends_on:
-      - server
-    environment:
-      REACT_APP_API_URL: http://localhost:5000
-    ports:
-      - "3000:3000"
 
 volumes:
   pgdata:
